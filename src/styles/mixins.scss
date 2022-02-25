@@ -1,0 +1,201 @@
+@mixin flex($direction: row, $alignment: normal, $justification: normal, $wrap: wrap, $gap: 0px) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justification;
+  align-items: $alignment;
+  flex-wrap: $wrap;
+  gap: $gap;
+}
+
+@mixin grid($columns: repeat(2, 1fr), $rows: 1fr, $gap: 10px) {
+  display: grid;
+  grid-template-columns: $columns;
+  grid-auto-rows: $rows;
+  gap: $gap;
+}
+
+@mixin b($point) {
+  @if $point==desktop {
+    @media (max-width: 1366px) and (min-width: 1024px) {
+      @content;
+    }
+  } @else if $point==tablet {
+    @media (max-width: 1000px) {
+      @content;
+    }
+  } @else if $point==mobile {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $point==extramobile {
+    @media (max-width: 480px) {
+      @content;
+    }
+  } @else if $point==mobile3x {
+    @media only screen and (-webkit-min-device-pixel-ratio: 3), only screen and (min-resolution: 3dppx), only screen and (min-resolution: 350dpi) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $point + 'px') {
+      @content;
+    }
+  }
+}
+
+// ======================================
+
+@function PI() { @return 3.14159265359; }
+
+@function rad ($angle) {
+  $unit: unit ($angle);
+  $unitless: $angle / ($angle *0 + 1);
+  //Если значение angle (угла) указано в градусах ('deg'), нужно конвертировать его в радианы.
+  @if $unit == deg {
+    $unitless: $unitless / 180 * PI();
+  }
+  @return $unitless;
+}
+
+@function rad ($angle) {
+  $unit: unit ($angle);
+  $unitless: $angle / ($angle *0 + 1);
+  //Если значение angle (угла) указано в градусах ('deg'), нужно конвертировать его в радианы.
+  @if $unit == deg {
+    $unitless: $unitless / 180 * PI();
+  }
+  @return $unitless;
+}
+
+@function sin($angle) {
+  $sin: 0;
+  $angle: rad($angle);
+  // Iterate a bunch of times.
+  @for $i from 0 through 10 {
+    $sin: $sin + pow(-1, $i) * pow($angle, (2 * $i + 1)) / fact(2 * $i + 1);
+  }
+  @return $sin;
+}
+
+@function pow($number, $exp) {
+  $value: 1;
+  @if $exp > 0 {
+    @for $i from 1 through $exp {
+      $value: $value * $number;
+    }
+  }
+  @else if $exp < 0 {
+    @for $i from 1 through -$exp {
+      $value: $value / $number;
+    }
+  }
+  @return $value;
+}
+
+@function fact($number) {
+  $value: 1;
+  @if $number > 0 {
+    @for $i from 1 through $number {
+      $value: $value * $i;
+    }
+  }
+  @return $value;
+}
+
+// ===========================
+// не используемые
+
+@mixin font($type) {
+  @if $type == 'xxxl' {
+    font-size: 26px;
+    line-height: 36px;
+  } @else if $type == 'xxl' {
+    font-size: 24px;
+    line-height: 34px;
+  } @else if $type == 'xl' {
+    font-size: 22px;
+    line-height: 32px;
+  } @else if $type == 'l' {
+    font-size: 20px;
+    line-height: 30px;
+  } @else if $type == 'm' {
+    font-size: 18px;
+    line-height: 28px;
+  } @else if $type == 's' {
+    font-size: 16px;
+    line-height: 26px;
+  } @else if $type == 'xs' {
+    font-size: 14px;
+    line-height: 24px;
+  } @else if $type == 'xxs' {
+    font-size: 12px;
+    line-height: 22px;
+  }
+}
+
+@mixin button($type) {
+  @if $type == 'primary' {
+    background: $gradientGreen;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 12px;
+    color: $white;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease-in-out;
+    &:hover {
+      box-shadow: $shadowButtonGreen;
+      transition: box-shadow 0.3s ease-in-out;
+    }
+  } @else if $type == 'primaryWithShadow' {
+    box-shadow: $shadowButtonGreen;
+    background: $gradientGreen;
+    border-radius: 6px;
+    border: none;
+    font-weight: 600;
+    font-size: 12px;
+    color: $white;
+    text-align: center;
+    cursor: pointer;
+  } @else if $type == 'secondary' {
+
+  } @else if $type == 'secondaryWithShadow' {
+
+  }
+}
+
+@mixin marker($type) {
+  @if $type == 'cluster' {
+    @include flex(row,center,center);
+    width: 40px;
+    height: 40px;
+    background: $gradientGrey;
+    box-shadow: $shadowMarker;
+    border-radius: 50%;
+    font-weight: bold;
+  } @else if $type == 'point' {
+    width: 50px;
+    height: 50px;
+    background: $gradientGrey;
+    box-shadow: $shadowMarker;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+  } @else if $type == 'desc' {
+    @include flex(column);
+    padding: 20px;
+    width: 330px;
+    background: $white;
+    box-shadow: $shadowMarker;
+    border-radius: 25px;
+    cursor: pointer;
+  }
+  @content;
+}
+
+
+@mixin bb($pointMax, $pointMin) {
+  @media (max-width: $pointMax + 'px') and (min-width: $pointMin + 'px') {
+    @content;
+  }
+}

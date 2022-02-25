@@ -1,0 +1,12 @@
+@import "styles/mixins";
+
+.app {
+  @include flex(column, center, center, nowrap);
+  text-align: center;
+  height: 100%;
+}
+
+.section {
+  @include flex(column, center, normal, nowrap, 20px);
+  height: 300px;
+}
